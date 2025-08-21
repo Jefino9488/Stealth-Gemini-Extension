@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Stealthy Gemini Assistant",
+  "version": "1.0.0",
+  "description": "Minimal Chrome extension for on-demand AI analysis using Gemini API",
+
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Gemini Assistant"
+  }
+}

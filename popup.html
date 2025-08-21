@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 350px;
+            min-height: 200px;
+            margin: 0;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            background: #f9f9f9;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .title {
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            color: #666;
+        }
+
+        .settings-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f1f3f4;
+            color: #5f6368;
+        }
+
+        .btn-secondary:hover {
+            background: #e8eaed;
+        }
+
+        .response {
+            margin-top: 16px;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            max-height: 200px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        .error {
+            background: #fef7f0;
+            border-color: #f9ab00;
+            color: #b06000;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #e0e0e0;
+            border-top: 2px solid #1a73e8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .settings-panel {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .settings-panel input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .settings-panel label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h2 class="title">Gemini Assistant</h2>
+    <button class="settings-btn" id="settingsBtn" title="Settings">⚙️</button>
+</div>
+
+<div class="input-group">
+    <textarea id="questionInput" placeholder="Ask Gemini anything about this page or in general..."></textarea>
+</div>
+
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+    <input type="checkbox" id="useContextCheckbox" checked style="margin: 0;">
+    <label for="useContextCheckbox" style="font-size: 12px; color: #666; margin: 0;">Use current page as context</label>
+</div>
+
+<div class="button-group">
+    <button class="btn btn-secondary" id="clearBtn">Clear</button>
+    <button class="btn btn-primary" id="submitBtn">Ask Gemini</button>
+</div>
+
+<div class="settings-panel" id="settingsPanel">
+    <label for="apiKeyInput">API Key:</label>
+    <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key">
+
+    <label for="systemPromptInput" style="margin-top: 12px; display: block;">System Prompt:</label>
+    <textarea id="systemPromptInput" placeholder="Enter system instructions for Gemini..." style="
+      width: 100%;
+      min-height: 80px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 12px;
+      font-family: inherit;
+      resize: vertical;
+    "></textarea>
+
+    <label for="transparencySlider" style="margin-top: 8px; display: block;">Message Box Transparency:</label>
+    <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+        <span style="font-size: 11px; color: #666;">Opaque</span>
+        <input type="range" id="transparencySlider" min="0.3" max="1" step="0.1" value="0.95" style="flex: 1;">
+        <span style="font-size: 11px; color: #666;">Transparent</span>
+    </div>
+    <span id="transparencyValue" style="font-size: 11px; color: #999;">95%</span>
+
+    <div class="button-group" style="margin-top: 16px;">
+        <button class="btn btn-secondary" id="cancelSettingsBtn">Cancel</button>
+        <button class="btn btn-primary" id="saveSettingsBtn">Save</button>
+    </div>
+</div>
+
+<div id="response" class="response" style="display: none;"></div>
+
+<script src="popup.js"></script>
+</body>
+</html>

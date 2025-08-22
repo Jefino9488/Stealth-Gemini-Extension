@@ -18,6 +18,13 @@ A Chrome extension that leverages Google Gemini AI to analyze and reply to selec
 - Right-click and choose "Analyze with Gemini" or "Reply with Gemini" from the context menu.
 - Configure your Gemini API key and other settings in the extension popup.
 
+## Screenshots
+
+![Main UI](doc/img.png)
+![Feature 0](doc/img_3.png)
+![Feature 1](doc/img_1.png)
+![Feature 2](doc/img_2.png)
+
 ## Configuration
 - Set your Gemini API key in the extension popup for full functionality.
 - Adjust system prompt and transparency as desired.
